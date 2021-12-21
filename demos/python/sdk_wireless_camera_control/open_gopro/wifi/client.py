@@ -38,12 +38,12 @@ class WifiClient:
             ConnectFailed: [description]
         """
         logger.info(f"Establishing Wifi connection to {ssid}")
-        for _ in range(retries):
+        for _ in range(50):
             if self._controller.connect(ssid, password, timeout):
                 self.ssid = ssid
                 self.password = password
                 return
-        raise ConnectFailed("Wifi failed to connect", timeout, retries)
+        raise ConnectFailed("Wifi failed to connect", timeout, 50)
 
     def close(self) -> None:
         """Close the client resource.

@@ -135,6 +135,7 @@ class GoPro(GoProBle, GoProWifi, Generic[BleDevice]):
         wifi_adapter: Type[WifiController] = Wireless,
         enable_wifi: bool = True,
         maintain_ble: bool = True,
+        wifi_device_name: str = None
     ) -> None:
         # Store initialization information
         self._enable_wifi_during_init = enable_wifi
@@ -142,7 +143,7 @@ class GoPro(GoProBle, GoProWifi, Generic[BleDevice]):
 
         # Initialize GoPro Communication Client
         GoProBle.__init__(self, ble_adapter(), self._disconnect_handler, self._notification_handler, target)
-        GoProWifi.__init__(self, wifi_adapter())
+        GoProWifi.__init__(self, wifi_adapter(wifi_device_name))
 
         # We start with version 1.0. It will be updated once we query the version
         self._api: Api = ApiV1_0(self, self)
