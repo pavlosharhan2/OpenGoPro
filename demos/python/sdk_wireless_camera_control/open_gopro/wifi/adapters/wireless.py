@@ -173,6 +173,13 @@ class Wireless(WifiController):
         Returns:
             bool: True if the connect was successful, False otherwise
         """
+        
+        response = cmd("sudo iwlist {interface} scan | grep ESSID".format(interface=self.interface()))
+        if ssid in response:
+            print("GoPro AP was found")
+        else:
+            print("GoPro AP was not found")
+
         return self._driver.connect(ssid, password, timeout)
 
     def disconnect(self) -> bool:
