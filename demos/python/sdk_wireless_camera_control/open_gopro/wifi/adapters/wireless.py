@@ -174,13 +174,16 @@ class Wireless(WifiController):
             bool: True if the connect was successful, False otherwise
         """
         
-        response = cmd("sudo iwlist {interface} scan | grep ESSID".format(interface=self.interface()))
+
+        cmd("sudo nmcli device wifi rescan ifname {interface}".format(interface=self.interface()))
+        response = cmd("sudo nmcli dev wifi list ifname {interface}".format(interface=self.interface()))
+	
         if ssid in response:
             print("GoPro AP was found")
         else:
             print("GoPro AP was not found")
 
-        return self._driver.connect(ssid, password, timeout)
+        return self._driver.connect(ssid, password, 40)
 
     def disconnect(self) -> bool:
         """Wrapper to call the OS-specific driver method.
@@ -320,6 +323,8 @@ class NmcliWireless(WifiController):
         response = cmd(
             "nmcli dev wifi connect {} password {} iface {}".format(ssid, password, self._interface)
         )
+        print("nmcli dev wifi connect {} password {} iface {}".format(ssid, password, self._interface))
+        print(response)
 
         # parse response
         return not self._error_in_response(response)
@@ -477,7 +482,8 @@ class Nmcli0990Wireless(WifiController):
         cmd("nmcli dev wifi list --rescan yes")
         # attempt to connect
         response = cmd(f"nmcli dev wifi connect {ssid} password {password} ifname {self._interface}")
-
+        print(f"nmcli dev wifi connect {ssid} password {password} ifname {self._interface}")
+        print(response)
         # TODO verify that we're connected (and use timeout)
 
         # parse response
