@@ -257,6 +257,7 @@ class NmcliWireless(WifiController):
     _interface = None
 
     def __init__(self, interface: str = None) -> None:
+        print("NmcliWireless")
         ensure_sudo()
         self.interface(interface)
 
@@ -419,6 +420,7 @@ class Nmcli0990Wireless(WifiController):
     _interface = None
 
     def __init__(self, interface: str = None) -> None:
+        print("Nmcli0990Wireless")
         ensure_sudo()
         self.interface(interface)
 
@@ -478,8 +480,6 @@ class Nmcli0990Wireless(WifiController):
         Returns:
             bool: [description]
         """
-        # Scan for networks. Don't bother checking: we'll allow the error to be passed from the connect.
-        cmd("nmcli dev wifi list --rescan yes")
         # attempt to connect
         response = cmd(f"nmcli dev wifi connect {ssid} password {password} ifname {self._interface}")
         print(f"nmcli dev wifi connect {ssid} password {password} ifname {self._interface}")
