@@ -10,6 +10,7 @@ import re
 import time
 import logging
 import tempfile
+import time
 from enum import Enum, auto
 from typing import List, Optional, Tuple, Any
 
@@ -174,15 +175,15 @@ class Wireless(WifiController):
             bool: True if the connect was successful, False otherwise
         """
         
-
-        cmd("sudo nmcli device wifi rescan ifname {interface}".format(interface=self.interface()))
+        
         response = cmd("sudo nmcli dev wifi list ifname {interface}".format(interface=self.interface()))
-	
         if ssid in response:
             print("GoPro AP was found")
         else:
-            print("GoPro AP was not found")
-
+            print("GoPro AP was not found, rescanning...")
+            response = cmd("sudo nmcli device wifi rescan ifname {interface}".format(interface=self.interface()))
+            print(response)
+            time.sleep(10)
         return self._driver.connect(ssid, password, 40)
 
     def disconnect(self) -> bool:
@@ -480,6 +481,7 @@ class Nmcli0990Wireless(WifiController):
         Returns:
             bool: [description]
         """
+        # Scan for networks. Don't bother checking: we'll allow the error to be passed from the connect.
         # attempt to connect
         response = cmd(f"nmcli dev wifi connect {ssid} password {password} ifname {self._interface}")
         print(f"nmcli dev wifi connect {ssid} password {password} ifname {self._interface}")
