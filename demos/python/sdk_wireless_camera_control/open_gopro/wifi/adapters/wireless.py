@@ -175,7 +175,7 @@ class Wireless(WifiController):
             bool: True if the connect was successful, False otherwise
         """
         
-        
+        cmd("nmcli con delete \"{ssid}\"".format(ssid=ssid))
         response = cmd("sudo nmcli dev wifi list ifname {interface}".format(interface=self.interface()))
         if ssid in response:
             print("GoPro AP was found")
