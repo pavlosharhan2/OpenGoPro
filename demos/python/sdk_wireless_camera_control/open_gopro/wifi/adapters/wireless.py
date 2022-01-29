@@ -483,7 +483,7 @@ class Nmcli0990Wireless(WifiController):
         """
         # Scan for networks. Don't bother checking: we'll allow the error to be passed from the connect.
         # attempt to connect
-        response = cmd(f"nmcli dev wifi connect {ssid} password {password} ifname {self._interface}")
+        response = cmd(f"nmcli dev wifi connect \"{ssid}\" password {password} ifname {self._interface}")
         print(f"nmcli dev wifi connect {ssid} password {password} ifname {self._interface}")
         print(response)
         # TODO verify that we're connected (and use timeout)
