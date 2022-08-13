@@ -1,5 +1,5 @@
 # Open GoPro Developer README
-
+....
 [comment]: <> (Do not touch the following line. It is used as the single source of versioning.)
 Current Version: 2.0
 
